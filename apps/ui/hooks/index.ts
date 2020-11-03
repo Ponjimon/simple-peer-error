@@ -1,4 +1,3 @@
-export * from './use-combined-refs';
 export * from './use-logger';
 export * from './use-peer';
 export * from './use-remote-stream';
