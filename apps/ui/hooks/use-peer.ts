@@ -1,5 +1,5 @@
-import Peer, { SignalData } from 'simple-peer';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import Peer from 'simple-peer';
+import { useCallback, useRef } from 'react';
 import { useSocket } from 'use-socketio';
 import { useLogger } from './use-logger';
 
@@ -9,7 +9,6 @@ export const usePeer = (
 ) => {
   const logger = useLogger('app:hook:use-peer');
   const { socket } = useSocket();
-  // const [peer, setPeer] = useState<Peer.Instance>(null);
   const peer = useRef<Peer.Instance>(null);
 
   const onSignal = useCallback(
@@ -51,43 +50,7 @@ export const usePeer = (
     if (offer) {
       peer.current.signal(offer);
     }
-    // setPeer(newPeer);
   });
 
   return peer;
-};
-
-export const usePeer2 = (
-  initiator = true,
-  stream?: MediaStream
-): [Peer.Instance, SignalData, SignalData] => {
-  const [peer, setPeer] = useState<Peer.Instance>(null);
-  const [offer, setOffer] = useState<SignalData>(null);
-  const [answer, setAnswer] = useState<SignalData>(null);
-
-  const onSignal = useCallback(
-    data => {
-      if (!offer) {
-        setOffer(data);
-      }
-      setAnswer(data);
-    },
-    [offer]
-  );
-
-  const onConnect = useCallback(() => {
-    console.info('Peer connected.');
-  }, []);
-
-  useEffect(() => {
-    if (offer) {
-      return;
-    }
-    const peer = new Peer({ initiator, stream, trickle: false });
-    peer.on('signal', onSignal).on('connect', onConnect);
-
-    setPeer(peer);
-  }, [onConnect, onSignal, offer, initiator, stream]);
-
-  return [peer, offer, answer];
 };

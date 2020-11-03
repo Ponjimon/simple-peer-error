@@ -1,9 +1,8 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import reset from 'styled-reset';
 import dynamic from 'next/dynamic';
 import styled, { createGlobalStyle } from 'styled-components';
-import { SocketIOProvider, useSocket } from 'use-socketio';
-import { usePeer, useRemoteStream } from '../hooks';
+import { SocketIOProvider } from 'use-socketio';
 
 const Content = styled.header`
   position: relative;
@@ -44,28 +43,6 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 const Main = dynamic(() => import('../containers/Main'), { ssr: false });
-
-const IO = () => {
-  const { socket } = useSocket('connect', () => {
-    console.info('IO connected.');
-  });
-
-  useEffect(() => {
-    if (socket) {
-      socket.connect();
-    }
-  }, [socket]);
-
-  return <>yes</>;
-};
-
-const Peer = dynamic(
-  async () => {
-    const { Peer: P } = await import('../components/dummy');
-    return P;
-  },
-  { ssr: false }
-);
 
 const Home = (): JSX.Element => {
   return (
