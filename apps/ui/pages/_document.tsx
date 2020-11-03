@@ -1,31 +1,55 @@
-import React, { ReactElement } from 'react';
-import Document, { Head, Main, NextScript } from 'next/document';
+import React from 'react';
+import Document, {
+  DocumentContext,
+  Html,
+  Main,
+  NextScript,
+  Head,
+} from 'next/document';
 import { ServerStyleSheet } from 'styled-components';
 
-export default class CustomDocument extends Document<{
-  styleTags: ReactElement[];
-}> {
-  static getInitialProps({ renderPage }) {
+export default class AppDocument extends Document {
+  static async getInitialProps(ctx: DocumentContext) {
     const sheet = new ServerStyleSheet();
+    const originalRenderPage = ctx.renderPage;
 
-    const page = renderPage((App) => (props) =>
-      sheet.collectStyles(<App {...props} />)
-    );
+    try {
+      ctx.renderPage = () =>
+        originalRenderPage({
+          enhanceApp: App => props => sheet.collectStyles(<App {...props} />),
+        });
 
-    const styleTags = sheet.getStyleElement();
+      const initialProps = await Document.getInitialProps(ctx);
 
-    return { ...page, styleTags };
+      return {
+        ...initialProps,
+        styles: (
+          <>
+            {initialProps.styles}
+            {sheet.getStyleElement()}
+          </>
+        ),
+      };
+    } finally {
+      sheet.seal();
+    }
   }
 
   render() {
     return (
-      <html>
-        <Head>{this.props.styleTags}</Head>
+      <Html>
+        <Head>
+          <link rel="manifest" href="/manifest.json" />
+          <link
+            href="https://fonts.googleapis.com/css?family=Syncopate:700"
+            rel="stylesheet"
+          />
+        </Head>
         <body>
           <Main />
           <NextScript />
         </body>
-      </html>
+      </Html>
     );
   }
 }

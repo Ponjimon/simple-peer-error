@@ -9,7 +9,7 @@
     "node": true
   },
   "settings": { "react": { "version": "detect" } },
-  "plugins": ["import", "jsx-a11y", "react", "react-hooks"],
+  "plugins": ["prettier", "import", "jsx-a11y", "react", "react-hooks"],
   "rules": {
     "array-callback-return": "warn",
     "dot-location": ["warn", "property"],
@@ -175,6 +175,7 @@
     "import/first": "error",
     "import/no-amd": "error",
     "import/no-webpack-loader-syntax": "error",
+    "import/order": 1,
     "react/forbid-foreign-prop-types": ["warn", { "allowInPropTypes": true }],
     "react/jsx-no-comment-textnodes": "warn",
     "react/jsx-no-duplicate-props": "warn",

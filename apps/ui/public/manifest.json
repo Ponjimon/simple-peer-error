@@ -1,0 +1,21 @@
+{
+    "name": "ELO Roulette",
+    "short_name": "ELOR",
+    "background_color": "#3f48cc",
+    "description": "ELO roulette",
+    "display": "fullscreen",
+    "start_url": "/",
+    "theme_color": "#3f48cc",
+    "icons": [
+        {
+          "src": "static/192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        },
+        {
+            "src": "static/512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+      ]
+}

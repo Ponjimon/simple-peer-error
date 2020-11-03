@@ -1,6 +1,58 @@
 {
   "version": 1,
   "projects": {
+    "server": {
+      "root": "apps/server",
+      "sourceRoot": "apps/server/src",
+      "projectType": "application",
+      "prefix": "server",
+      "schematics": {},
+      "architect": {
+        "build": {
+          "builder": "@nrwl/node:build",
+          "options": {
+            "outputPath": "dist/apps/server",
+            "main": "apps/server/src/main.ts",
+            "tsConfig": "apps/server/tsconfig.app.json"
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": []
+            }
+          }
+        },
+        "serve": {
+          "builder": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "server:build"
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:lint",
+          "options": {
+            "linter": "eslint",
+            "tsConfig": [
+              "apps/server/tsconfig.app.json",
+              "apps/server/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!apps/server/**/*"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "apps/server/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "ui": {
       "root": "apps/ui",
       "sourceRoot": "apps/ui",
@@ -39,7 +91,9 @@
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["apps/ui/**/*.{ts,tsx}"]
+            "lintFilePatterns": [
+              "apps/ui/**/*.{ts,tsx}"
+            ]
           }
         },
         "test": {
@@ -51,28 +105,25 @@
         }
       }
     },
-    "ui-e2e": {
-      "root": "apps/ui-e2e",
-      "sourceRoot": "apps/ui-e2e/src",
-      "projectType": "application",
+    "utils": {
+      "root": "libs/utils",
+      "sourceRoot": "libs/utils/src",
+      "projectType": "library",
+      "schematics": {},
       "architect": {
-        "e2e": {
-          "builder": "@nrwl/cypress:cypress",
-          "options": {
-            "cypressConfig": "apps/ui-e2e/cypress.json",
-            "tsConfig": "apps/ui-e2e/tsconfig.e2e.json",
-            "devServerTarget": "ui:serve"
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "ui:serve:production"
-            }
-          }
-        },
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["apps/ui-e2e/**/*.{js,ts}"]
+            "lintFilePatterns": [
+              "libs/utils/**/*.ts"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/utils/jest.config.js",
+            "passWithNoTests": true
           }
         }
       }
